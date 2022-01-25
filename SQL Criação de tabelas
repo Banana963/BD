@@ -1,0 +1,625 @@
+create table F31_Participante
+(email 						varchar(60) 			primary key,
+nomeProprio 				varchar(20) 			Not Null,
+apelido 					varchar(20) 			Not Null,
+andar 						INTEGER 				Not null,
+porta 						INTEGER 				NOT null,
+rua 						INTEGER 				NOT NULL,
+codPostal 					INTEGER 				not NULL,
+localiddae 					VARCHAR(60) 			NOT NULL 
+)Engine InnoDB;
+
+CREATE TABLE F31_contactos
+(contacto 					VARCHAR(9) 				NOT NULL,
+contacto_participante 		VARCHAR(60),
+FOREIGN KEY (contacto_participante) REFERENCES F31_Participante (email)
+)Engine InnoDB;
+
+create table F31_eventos 
+(id INTEGER auto_increment primary key,
+designacao varchar(100) not null,
+dataInicio date Not Null,
+dataFim date Not null,
+horaInicio time Not Null,
+Localizacao varchar(50) Not Null,
+tipo ENUM ("privado","publico") Not Null,
+cliente varchar(60) Not Null,
+Foreign key (cliente) references F31_Participante (email)
+)Engine InnoDB;
+
+CREATE TABLE F31_Participante_Eventos
+(PRIMARY KEY (participante,evento),
+participante VARCHAR(60) NOT NULL, 
+FOREIGN key (participante) REFERENCES F31_Participante (email),
+evento INTEGER NOT NULL,
+FOREIGN KEY (evento) REFERENCES F31_eventos (id)
+)Engine InnoDB;
+
+CREATE TABLE F31_convites
+(PRIMARY KEY (evento,participante),
+evento INTEGER NOT NULL,
+FOREIGN KEY (evento) REFERENCES F31_eventos (id),
+participante VARCHAR(60) NOT NULL,
+FOREIGN key (participante) REFERENCES F31_Participante (email)
+)Engine InnoDB;
+
+CREATE TABLE F31_Fotografia
+(id INTEGER auto_increment PRIMARY KEY,
+nomeficheiro varchar(30) NOT NULL,
+horaCapturaFoto TIME  NOT NULL,
+comentario varchar(200),
+evento INTEGER NOT NULL,
+FOREIGN KEY (evento) REFERENCES F31_eventos (id),
+autor varchar(60) NOT NULL,
+FOREIGN KEY (autor) REFERENCES F31_Participante (email)
+)Engine InnoDB;
+
+CREATE table F31_Mensagem
+(id INTEGER auto_increment PRIMARY KEY,
+texto VARCHAR(200) NOT NULL,
+dataHoraEnvio datetime NOT NULL,
+jaLeu TIMESTAMP NOT NULL,
+dataHoraLeitura datetime NOT NULL,
+evento INTEGER NOT NULL, 
+FOREIGN KEY (evento) REFERENCES F31_eventos (id),
+criador VARCHAR(60) NOT NULL, 
+FOREIGN KEY (autor) REFERENCES F31_Participante (email),
+destinatario VARCHAR(60) NOT NULL,
+FOREIGN KEY (autor) REFERENCES F31_Participante (email)
+)Engine InnoDB;
+
+
+///////////////////////////////////_____________F31____________________///////////////////////////////
+
+
+create table F31_Participante
+(email 						varchar(60) 		primary key,
+nomeProprio 				varchar(20) 		Not Null,
+apelido 					varchar(20) 		Not Null,
+andar 						INTEGER 			Not null,
+porta 						INTEGER 			NOT null,
+rua 						INTEGER 			NOT NULL,
+codPostal 					INTEGER 			not NULL,
+localiddae 					VARCHAR(60) 		NOT NULL 
+)Engine InnoDB;
+
+CREATE TABLE F31_contactos
+(contacto 					VARCHAR(9) 			NOT NULL,
+contacto_participante 		VARCHAR(60),
+FOREIGN KEY (contacto_participante) REFERENCES F31_Participante (email)
+)Engine InnoDB;
+
+create table F31_eventos 
+(id 				INTEGER auto_increment 		primary key,
+designacao 			varchar(100) 				not null,
+dataInicio 			date 						Not Null,
+dataFim 			date 						Not null,
+horaInicio 			time 						Not Null,
+Localizacao 		varchar(50) 				Not Null,
+tipo 				ENUM ('privado','publico'),
+cliente 			varchar(60) 				Not Null,
+Foreign key (cliente) references F31_Participante (email)
+)Engine InnoDB;
+
+CREATE TABLE F31_Participante_Eventos
+(PRIMARY KEY (participante,evento),
+participante 		VARCHAR(60) 				NOT NULL,
+FOREIGN key (participante) REFERENCES F31_Participante (email),
+evento 				INTEGER 					NOT NULL,
+FOREIGN KEY (evento) REFERENCES F31_eventos (id)
+)Engine InnoDB;
+
+CREATE TABLE F31_convites
+(PRIMARY KEY (evento,participante),
+evento 				INTEGER 					NOT NULL,
+FOREIGN KEY (evento) REFERENCES F31_eventos (id),
+participante 		VARCHAR(60) 				NOT NULL,
+FOREIGN key (participante) REFERENCES F31_Participante (email)
+)Engine InnoDB;
+
+CREATE TABLE F31_Fotografia
+(id 				INTEGER auto_increment 		PRIMARY KEY,
+nomeficheiro 		varchar(30) 				NOT NULL,
+horaCapturaFoto 	TIME 						NOT NULL,
+comentario 			varchar(200),
+evento 				INTEGER 					NOT NULL,
+FOREIGN KEY (evento) REFERENCES F31_eventos (id),
+autor 				varchar(60) 				NOT NULL,
+FOREIGN KEY (autor) REFERENCES F31_Participante (email)
+)Engine InnoDB;
+
+CREATE table F31_Mensagem
+(id 				INTEGER auto_increment 		PRIMARY KEY,
+texto 				VARCHAR(200) 				NOT NULL,
+dataHoraEnvio 		datetime 					NOT NULL,
+jaLeu 				TIMESTAMP 					NOT NULL,
+dataHoraLeitura 	datetime 					NOT NULL,
+evento 				INTEGER 					NOT NULL, 
+FOREIGN KEY (evento) REFERENCES F31_eventos (id),
+criador 			VARCHAR(60) 				NOT NULL, 
+FOREIGN KEY (autor) REFERENCES F31_Participante (email),
+destinatario 		VARCHAR(60) 				NOT NULL,
+FOREIGN KEY (autor) REFERENCES F31_Participante (email)
+)Engine InnoDB;
+
+
+////////////////////////////___________F32___________/////////////////////////////////////////
+
+
+CREATE TABLE f32_clientes
+(ID				INTEGER		auto_increment	 	PRIMARY KEY,
+nomeProprio	    VARCHAR(20)	 					NOT NULL,
+Apelido 		VARCHAR(20) 					NOT NULL,
+Data_Nasc 		DATE 							NOT NULL,
+Telemovel		VARCHAR(9)						NOT NULL,
+Morada			VARCHAR(20)						NOT NULL,
+Localidade		VARCHAR(20)						NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F32_PacotedeViagem
+(num 			INTEGER		auto_increment		PRIMARY KEY,
+nome			VARCHAR(20)						NOT NULL,
+preco			DECIMAL(5,2)					NOT NULL,
+vigenciaI		DATEtime						NOT NULL,
+vigenciaF		DATEtime						NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F32_Hotel
+(nome 			VARCHAR(50)						PRIMARY KEY,
+cidade			VARCHAR(20)						NOT NULL,
+pais			VARCHAR(20)						NOT NULL,
+QuartosDuplos	INTEGER							NOT NULL,
+QuartosSimples	INTEGER							NOT NULL,
+PercentagemAcrescida	INTEGER					NOT NULL
+)engine innodb;
+
+Create TABLE F32_Estadia
+(PRIMARY KEY (num,nome),
+regimeAlojamento VARCHAR(10)					NOT NULL,
+num 			INTEGER							NOT NULL,
+FOREIGN KEY (num) REFERENCES F32_PacotedeViagem (num),
+nome			VARCHAR(50)						NOT NULL,
+FOREIGN KEY (nome) REFERENCES F32_Hotel (nome)
+)Engine innodb;
+
+CREATE TABLE F32_Viagens
+(id 			INTEGER		auto_increment		PRIMARY KEY,
+origem 			VARCHAR(20)						NOT NULL,
+destino			VARCHAR(20)						NOT NULL,
+dataSaida		DATETIME						NOT NULL,
+horaSaida		TIME							NOT NULL,
+diaChegada		datetime						NOT NULL,
+diaSaida		datetime						NOT NULL,
+preco			decimal(5,2)					NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F32_Compras
+(numero			INTEGER							PRIMARY KEY,
+dataCompra		DATETIME						NOT NULL,
+detalhes		VARCHAR(120)					NOT NULL,
+Estado_Compra	set('pendente','paga')			NOT NULL,
+enforcado 		INTEGER							NOT NULL,
+FOREIGN KEY (enforcado) REFERENCES F32_clientes (id),
+viagem 			INTEGER							NOT NULL,
+FOREIGN KEY (viagem) REFERENCES F32_PacotedeViagem (num)
+)engine innodb;
+
+CREATE TABLE F32_CompraViagem
+(PRIMARY key (id,numero),
+id 				INTEGER							NOT NULL,
+foreign KEY (id) REFERENCES F32_Viagens (id),
+numero 			INTEGER							NOT NULL,
+FOREIGN KEY (numero) REFERENCES F32_Compras (numero)
+)Engine InnoDB;
+
+CREATE TABLE F32_CompraHotel
+(PRIMARY KEY (nome,numero),
+nome			VARCHAR(50)						NOT NULL,
+FOREIGN KEY (nome) REFERENCES F32_Hotel (nome),
+numero 			INTEGER							NOT NULL,
+FOREIGN KEY (numero) REFERENCES F32_Compras (numero)
+)Engine InnoDB;
+
+CREATE TABLE F32_PacotesCompostos
+(PRIMARY KEY (num,id),
+num 			INTEGER							NOT NULL,
+foreign KEY (num) REFERENCES F32_PacotedeViagem (num),
+id 				INTEGER							NOT NULL,
+FOREIGN KEY (id) REFERENCES F32_Viagens (id)
+)Engine InnoDB;
+
+CREATE TABLE F32_Companhia
+(id 			INTEGER		auto_increment		PRIMARY KEY,
+nome			VARCHAR(20)						NOT NULL,
+morada			VARCHAR(20)						NOT NULL,
+VolumeAnualPassageiros	INTEGER					NOT NULL,
+nacionalidade	VARCHAR(20)						NOT NULL,
+contactos		varchar(9)						NOT NULL,
+nomePessoas		VARCHAR(20)						NOT NULL,
+cargoPessoas	VARCHAR(20)						NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F32_Aviao
+(id_Aviao		INTEGER 	auto_increment		PRIMARY KEY,
+id_Companhia 	INTEGER,
+FOREIGN KEY (id_Companhia) REFERENCES F32_Companhia (id),
+num_Avioes		INTEGER							NOT NULL,
+num_Lugares		INTEGER							NOT NULL,
+Voos_charter	BOOLEAN							NOT NULL,
+Tipo_Aviao 		enum('Nacional','Internacional')	NOT NULL
+)engine innodb;
+
+CREATE TABLE F32_Emp_Ferroviaria
+(nr_id_empresa	INTEGER		auto_increment		primary KEY
+)Engine InnoDB;
+
+create TABLE F32_comboio
+(nr_comboio		INTEGER	 	auto_increment		primary KEY,
+tipo			ENUM('normal','pendular','TGV')	NOT null
+)Engine InnoDB;
+
+CREATE TABLE F32_linha
+(nr_linha		INTEGER		auto_increment		primary KEY,
+tipo_linha		enum('local','Regional','Nacional','Internacional')	NOT null
+)Engine InnoDB;
+
+CREATE table F32_empresa_comboio
+(nome_linha		varchar(20)						NOT null,
+nr_comboio		INTEGER							NOT null,
+FOREIGN KEY (nr_comboio) REFERENCES F32_comboio (nr_comboio),
+nr_empresa		INTEGER							NOT null,
+FOREIGN KEY (nr_empresa) REFERENCES F32_Emp_Ferroviaria (nr_id_empresa)
+)Engine InnoDB;
+
+CREATE TABLE F32_empresa_linha
+(nr_linha		INTEGER							NOT null,
+FOREIGN KEY (nr_linha) REFERENCES F32_linha (nr_linha),
+nr_empresa		INTEGER							NOT null,
+FOREIGN KEY (nr_empresa) REFERENCES F32_Emp_Ferroviaria (nr_id_empresa)
+)Engine InnoDB;
+
+
+create TABLE F32_Autocarros
+(Nr_autocarro 	INTEGER		auto_increment		PRIMARY KEY,
+Plano_seguranca	ENUM('sim','não')				NOT NULL,
+Caracteristicas	VARCHAR(60)						NOT NULL, 
+id_Companhia 	INTEGER							NOT NULL,
+FOREIGN KEY (id_Companhia) REFERENCES F32_Companhia (id)
+)Engine InnoDB;
+
+CREATE TABLE F32_Emp_Telecom
+(nome 			VARCHAR(20)						PRIMARY KEY,
+contacto		VARCHAR(9)						NOT NULL,
+nacionalidade	VARCHAR(20)						NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F32_viagemexecutiva
+(id_Viagem 		INTEGER							NOT NULL,
+FOREIGN KEY (id_Viagem) REFERENCES F32_Viagens (id),
+id_executiva 	INTEGER		auto_increment		PRIMARY KEY
+)Engine InnoDB;
+
+CREATE TABLE F32_viagempremier
+(id_Viagem 		INTEGER							NOT NULL,
+FOREIGN KEY (id_Viagem) REFERENCES F32_Viagens (id),
+id_premier		INTEGER		auto_increment		PRIMARY KEY
+)Engine InnoDB;
+
+CREATE TABLE F32_viagemradical
+(id_radical		INTEGER		auto_increment		PRIMARY KEY,
+id_Viagem		INTEGER							NOT NULL,
+FOREIGN KEY (id_Viagem) REFERENCES F32_Viagens (id)
+)Engine InnoDB;
+
+CREATE TABLE F32_GuiaPessoal
+(id_guia		INTEGER		auto_increment		primary KEY,
+nome			VARCHAR(20)						NOT NULL,
+nacionalidade 	VARCHAR(30)						NOT NULL,
+contacto		VARCHAR(9)						NOT NULL,
+data_nasc		DATE 							NOT NULL,
+preco_hora		DECIMAL(5,2)					NOT NULL,
+viagem_premier	INTEGER							NOT NULL,
+FOREIGN KEY (viagem_premier) REFERENCES F32_viagempremier (id_premier)
+)Engine InnoDB;
+
+
+CREATE TABLE F32_Servicos
+(nr_servico		INTEGER		auto_increment 		PRIMARY KEY,
+tipo_servico	enum('Internet','telemovel','videoconferencia')	NOT null,
+preco			decimal(5,2)					NOT null
+)Engine InnoDB;
+
+
+CREATE TABLE F32_ServicoInternet
+(nr_servico		INTEGER							NOT NULL,
+FOREIGN KEY (nr_servico) REFERENCES F32_Servicos (nr_servico),
+tipo_servico	enum('Internet')				primary KEY
+)Engine InnoDB;
+
+
+CREATE TABLE F32_ServicoTelemovel
+(nr_servico		INTEGER							NOT NULL,
+FOREIGN KEY (nr_servico) REFERENCES F32_Servicos (nr_servico),
+tipo_servico	enum('telemovel')				primary KEY
+)Engine InnoDB;
+
+
+CREATE TABLE F32_ServicoVideoconf
+(nr_servico		INTEGER							NOT NULL,
+FOREIGN KEY (nr_servico) REFERENCES F32_Servicos (nr_servico),
+tipo_servico	enum('videoconferencia')		primary KEY
+)Engine InnoDB;
+
+
+
+
+////////////////////////////////////////////____________________F33__________________________//////////////////////////////////////////
+
+
+CREATE TABLE F33_equipa
+(id 		INTEGER			auto_increment			PRIMARY KEY,
+nome		VARCHAR(20)								NOT NULL,
+localidade	VARCHAR(30)								NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F33_Dirigente
+(id_dirigente	INTEGER		auto_increment			PRIMARY KEY,
+id_equipa		INTEGER 							NOT NULL,
+FOREIGN KEY (id_equipa) REFERENCES F33_equipa (id)
+)Engine InnoDB;
+
+CREATE TABLE F33_Dirigente_responsavel
+(nr_dirigente	INTEGER		auto_increment			PRIMARY KEY,
+telemovel		VARCHAR(9)							NOT NULL,
+email			VARCHAR(30)							NOT NULL,
+morada			VARCHAR(40)							NOT NULL,
+id_dirigente	INTEGER								NOT NULL,
+FOREIGN KEY (id_dirigente) REFERENCES F33_Dirigente (id_dirigente)
+)Engine InnoDB;
+
+CREATE TABLE F33_Treinador
+(nr_treinador	INTEGER		auto_increment			PRIMARY KEY,
+telemovel		VARCHAR(9)							NOT NULL,
+email			VARCHAR(30)							NOT NULL,
+morada			VARCHAR(40)							NOT NULL,
+id_dirigente	INTEGER								NOT NULL,
+FOREIGN KEY (id_dirigente) REFERENCES F33_Dirigente (id_dirigente)
+)Engine InnoDB;
+
+CREATE TABLE F33_jogador
+(nr_camisola	INTEGER								PRIMARY KEY,
+nome			VARCHAR(30)							NOT NULL,
+altura			DECIMAL (3,2)						NOT NULL,
+data_nasc		DATE								NOT NULL,
+id_equipa		INTEGER								NOT NULL,
+FOREIGN KEY (id_equipa) REFERENCES F33_equipa (id)
+)Engine innodb;
+
+CREATE TABLE F33_jogo
+(nr_jogo		INTEGER		auto_increment			PRIMARY KEY,
+nome			varchar(20)							NOT NULL,
+data_inicio		DATE								NOT NULL,
+hora_inicio		TIMESTAMP							NOT NULL,
+pontos_equipa1	INTEGER								NOT NULL,
+pontos_equipa2	INTEGER								NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F33_Equipa_participante
+(id_equipa		INTEGER 							NOT NULL,
+FOREIGN KEY (id_equipa) REFERENCES F33_equipa (id),
+nr_jogo			INTEGER								NOT NULL,
+FOREIGN KEY (nr_jogo) REFERENCES F33_jogo (nr_jogo)
+)Engine InnoDB;
+
+CREATE TABLE F33_jogador_participante
+(nr_camisola	INTEGER								NOT NULL,
+FOREIGN KEY (nr_camisola) REFERENCES F33_jogador (nr_camisola),
+nr_jogo 		INTEGER 							NOT NULL,
+foreign KEY (nr_jogo) REFERENCES F33_jogo (nr_jogo)
+)Engine InnoDB;
+
+CREATE TABLE F33_cestos_efetuados
+(nr_camisola 	INTEGER 							NOT NULL,
+FOREIGN KEY (nr_camisola) REFERENCES F33_jogador (nr_camisola),
+nr_jogo			INTEGER								NOT NULL,
+FOREIGN KEY (nr_jogo) REFERENCES F33_jogo (nr_jogo)
+)Engine InnoDB;
+
+CREATE TABLE F33_equipa_tecnica
+(id_tecnico		INTEGER		auto_increment			primary KEY,
+telemovel		VARCHAR(9)							not null,
+e_mail			VARCHAR(40)							not null,
+morada 			VARCHAR(40)							not null
+)Engine InnoDB;
+
+CREATE TABLE F33_tecnico_mesa
+(nr_tecnico		INTEGER		auto_increment			primary KEY,
+nome			VARCHAR(20)							not null,
+data_nasc		DATE								NOT NULL,
+altura			DECIMAL(3,2)						not null,
+id_tecnico		INTEGER								not null,
+FOREIGN KEY (id_tecnico) REFERENCES F33_equipa_tecnica (id_tecnico)
+)Engine InnoDB;
+
+CREATE TABLE F33_arbitro
+(nr_arbitro		INTEGER		auto_increment			primary KEY,
+nome			VARCHAR(20)							not null,
+data_nasc		DATE								NOT NULL,
+altura			DECIMAL(3,2)						not null,
+id_tecnico		INTEGER								not null,
+FOREIGN KEY (id_tecnico) REFERENCES F33_equipa_tecnica (id_tecnico)
+)Engine InnoDB;
+
+CREATE TABLE F33_Regulamento_jogo
+(id_tecnico		INTEGER								not null,
+FOREIGN KEY (id_tecnico) REFERENCES F33_equipa_tecnica (id_tecnico),
+nr_jogo			INTEGER								not null,
+FOREIGN KEY (nr_jogo) REFERENCES F33_jogo (nr_jogo)
+)Engine InnoDB;
+
+
+//////////////////////___________________F34_____________________/////////////////////////////
+
+
+CREATE TABLE F34_Veiculo
+(matricula				VARCHAR(6)							PRIMARY KEY,
+marca					VARCHAR(10)							NOT null,
+modelo					VARCHAR(10)							NOT null,
+cilindrada				VARCHAR(10)							NOT null,
+potencia				VARCHAR(10)							NOT null,
+tipo_caixa				VARCHAR(16)							NOT null,
+combustivel				VARCHAR(10)							NOT null,
+preco_aluguer			DECIMAL(5,2)						NOT null,
+kilometros				DECIMAL(6,2)						NOT null,
+data_inspecao			DATE								NOT null,
+kilometros_inspecao		DECIMAL(6,2)						NOT null
+)Engine InnoDB;
+
+CREATE TABLE F34_Veiculo_pesado
+(nr_pesado				INTEGER 		auto_increment		primary key,
+matricula				VARCHAR(6)							NOT null,
+FOREIGN key (matricula) REFERENCES F34_Veiculo (matricula)
+)Engine InnoDB;
+
+CREATE TABLE F34_Veiculo_motociclo
+(nr_chassi				INTEGER								primary key,
+nr_rodas				INTEGER								NOT NULL,
+categoria				VARCHAR(10)							NOT NULL,
+matricula				VARCHAR(6)							NOT NULL,
+FOREIGN key (matricula) REFERENCES F34_Veiculo (matricula)
+)Engine InnoDB;
+
+CREATE TABLE F34_Veiculo_ligeiro
+(nr_chassi				INTEGER								PRIMARY KEY,
+matricula				VARCHAR(6)							NOT NULL,
+FOREIGN key (matricula) REFERENCES F34_Veiculo (matricula),
+carroceria				VARCHAR(16)							NOT NULL,
+nr_portas				INTEGER 							NOT NULL,
+nr_lugares				INTEGER								NOT NULL,
+segmento				VARCHAR(14)							NOT NULL,
+classe_portagem			enum('1','2','3','4')				NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F34_Veiculo_pesado_mercadoria
+(nr_chassi				INTEGER								primary key,
+nr_pesado				INTEGER								NOT NULL,
+FOREIGN key (nr_pesado) REFERENCES F34_Veiculo_pesado (nr_pesado),
+tipo_caixa				VARCHAR(10)							NOT NULL,
+comprimento				DECIMAL(3,2)						NOT NULL,
+altura					DECIMAL(3,2)						NOT NULL,
+tara					DECIMAL(3,2)						NOT NULL,
+peso_bruto				DECIMAL(3,2)						NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F34_Veiculo_pesado_passageiro
+(nr_chassi				INTEGER								primary key,
+nr_pesado				INTEGER								NOT NULL,
+FOREIGN key (nr_pesado) REFERENCES F34_Veiculo_pesado (nr_pesado),
+nr_lugares				INTEGER								NOT NULL,
+classe_conforto			VARCHAR(10)							NOT NULL,
+nr_pisos				INTEGER								NOT NULL,
+wc						BOOLEAN								NOT NULL,
+circuito_TV				BOOLEAN								NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F34_Manutencao
+(nr_ordem				INTEGER			auto_increment		primary KEY,
+matricula_veiculo		VARCHAR(6)							NOT null,
+FOREIGN KEY (matricula_veiculo) REFERENCES F34_Veiculo (matricula),
+data_inicio				TIMESTAMP							NOT null,
+data_fim				TIMESTAMP							NOT null,
+hora_inicio				TIME								NOT null,
+hora_fim				TIME								NOT null,
+custo_mao_obra			DECIMAL(5,2)						NOT null,
+kms_inicio_inspecao		DECIMAL(6,2)						NOT null
+)Engine InnoDB;
+
+CREATE TABLE F34_Manutencao_periodica
+(nr_insp_periodica		INTEGER			auto_increment		primary KEY,
+nr_ordem				INTEGER								NOT null,
+FOREIGN key (nr_ordem) REFERENCES F34_Manutencao (nr_ordem),
+kms_prox_insp			DECIMAL(6,2)						NOT null
+)Engine InnoDB;
+
+CREATE TABLE F34_Manutencao_corretiva
+(nr_insp_corretiva		INTEGER 		auto_increment		primary key,
+nr_ordem				INTEGER								NOT null,
+FOREIGN key (nr_ordem) REFERENCES F34_Manutencao (nr_ordem)
+)Engine InnoDB;
+
+CREATE TABLE F34_Cliente
+(nr_cliente				INTEGER			auto_increment		primary key,
+nome					VARCHAR(10)							NOT NULL,
+sexo					enum('Masculino','Feminino')		NOT NULL,
+apelido					VARCHAR(14)							NOT NULL,
+nr_carta				INTEGER								NOT NULL,
+tipo_seguro				VARCHAR(14)							NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F34_Servico
+(codigo					INTEGER			auto_increment		primary key,
+cliente					INTEGER								NOT NULL,
+FOREIGN key (cliente) REFERENCES F34_Cliente (nr_cliente),
+matricula_veiculo		VARCHAR(6)							NOT NULL,
+FOREIGN key (matricula_veiculo) REFERENCES 	F34_Veiculo (matricula),
+cidade_inicio			VARCHAR(14)							NOT NULL,
+cidade_fim				VARCHAR(14)							NOT NULL,
+hora_partida			TIME								NOT NULL,
+hora_chegada			TIME								NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F34_reserva
+(codigo_reserva			INTEGER			auto_increment		primary key,
+codigo_servico			INTEGER								NOT NULL,
+FOREIGN key (codigo_servico) REFERENCES F34_Servico (codigo),
+cliente					INTEGER								NOT NULL,
+FOREIGN key (cliente) REFERENCES F34_Cliente (nr_cliente)
+)Engine Innodb;
+
+CREATE TABLE F34_Servico_aluguer
+(nr_aluguer				INTEGER 		auto_increment		primary key,
+codigo_servico			INTEGER								NOT NULL,
+FOREIGN key (codigo_servico) REFERENCES F34_Servico (codigo)
+)Engine InnoDB;
+
+CREATE TABLE F34_Servico_transporte
+(nr_transporte			INTEGER			auto_increment		primary key,
+quant_motoristas		INTEGER								NOT NULL,
+codigo_servico			INTEGER 							NOT NULL,
+FOREIGN key (codigo_servico) REFERENCES F34_Servico (codigo)
+)Engine InnoDB;
+
+CREATE TABLE F34_Empregado
+(nr_empregado			INTEGER			auto_increment		primary key,
+nome 					VARCHAR(20)							NOT NULL,
+morada					VARCHAR(30)							NOT NULL,
+telefone				varchar(9)							NOT NULL,
+data_admissao			DATE								NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F34_Empregado_administrativo
+(nr_administrativo		INTEGER			auto_increment		primary key,
+empregado				INTEGER 							NOT NULL,
+FOREIGN key (empregado) REFERENCES F34_Empregado (nr_empregado)
+)Engine InnoDB;
+
+CREATE TABLE F34_Empregado_condutor
+(nr_condutor			INTEGER			auto_increment		primary key,
+empregado				INTEGER 							NOT NULL,
+FOREIGN key (empregado) REFERENCES F34_Empregado (nr_empregado),
+nr_horas				TIME								NOT NULL,
+nr_carta				INTEGER 							NOT NULL,
+data_emissao			DATE								NOT NULL,
+categoria				VARCHAR(10)							NOT NULL
+)Engine InnoDB;
+
+CREATE TABLE F34_Condutor_associado
+(condutor				INTEGER 							NOT NULL,
+FOREIGN key (condutor) REFERENCES F34_Empregado_condutor (nr_condutor),
+cliente 				INTEGER								NOT NULL,
+FOREIGN key (cliente) REFERENCES F34_Cliente (nr_cliente)
+)Engine InnoDB;
+
+
+
+sv 193.137.5.175
