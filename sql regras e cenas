@@ -1,0 +1,444 @@
+SELECT a.nome,especie,raca,b.nome
+FROM tbl_Animais a INNER JOIN tbl_Donos b on dono=idcliente
+
+Ordenação de tabela
+SELECT a.nome,especie,raca,b.nome
+FROM tbl_Animais a INNER JOIN tbl_Donos b on dono=idcliente
+order BY a.nome
+
+So mostra valores especificos
+SELECT a.nome,especie,raca,b.nome 
+FROM tbl_Animais a INNER JOIN tbl_Donos b on dono=idcliente 
+WHERE a.nome="pastor"
+
+
+SELECT idconsulta,dataConsulta,b.nome,c.nome,d.telefone
+FROM tbl_Consultas a INNER JOIN tbl_Animais b 
+ON a.animal=b.idAnimal INNER JOIN tbl_Donos c 
+ON b.dono=c.idCliente INNER JOIN tbl_TelefonesDonos d 
+ON c.idCliente=d.idDono
+
+
+Procurar resultado onde existe a seginte data 27-03-2001
+
+SELECT idconsulta,dataConsulta,b.nome,c.nome,d.telefone
+FROM tbl_Consultas a INNER JOIN tbl_Animais b 
+ON a.animal=b.idAnimal INNER JOIN tbl_Donos c 
+ON b.dono=c.idCliente INNER JOIN tbl_TelefonesDonos d 
+ON c.idCliente=d.idDono
+WHERE dataConsulta="2001-03-27"
+
+
+Substituição do nome do atributo
+
+SELECT idconsulta,dataConsulta,b.nome as "Nome do animal",c.nome as "Nome da pessoa",d.telefone
+FROM tbl_Consultas a INNER JOIN tbl_Animais b 
+ON a.animal=b.idAnimal INNER JOIN tbl_Donos c 
+ON b.dono=c.idCliente INNER JOIN tbl_TelefonesDonos d 
+ON c.idCliente=d.idDono
+WHERE dataConsulta="2001-03-27"
+
+
+//////////________aula 17/11/2021_________/////////////
+
+
+selecionar o animal cujo o nome é pastor e o seu respetivo id.
+
+SELECT idAnimal,nome
+FROM tbl_Animais
+WHERE nome='pastor';
+
+SELECT idAnimal,nome 
+FROM tbl_Animais 
+WHERE nome LIKE 'pastor'
+
+LIKE 
+% -> representa um nr arbitrario de caracteres
+_ -> representa 1 caracter
+
+
+SELECT idAnimal,nome 
+FROM tbl_Animais 
+WHERE nome LIKE 'p%'
+
+
+Ver registos onde a data é superior ao apresentado em ' '
+
+SELECT *  <- todos os registos da tabela
+FROM tbl_Consultas
+WHERE dataconsulta>'2001-01-01'
+
+
+procura as consultas que foram dadas no mes de março.
+
+SELECT * 
+FROM tbl_Consultas
+WHERE dataconsulta LIKE '%-03-%'
+
+
+nomes comecadoos em a e com um a la pelo meio
+
+SELECT * FROM tbl_Donos WHERE nome LIKE 'A%a%'
+
+
+Nomes começados em A e acabam em A
+
+SELECT * 
+FROM tbl_Donos WHERE nome 
+LIKE 'A%a %'
+
+
+nome do animal onde o dono comeca em a e tem a no nome
+
+SELECT a.nome, b.nome 
+FROM tbl_Donos a INNER JOIN tbl_Animais b ON a.idCliente=b.dono 
+WHERE a.nome LIKE 'A%a%'
+
+
+nome dos animais e dono onde os animais tem mais de 35kg
+
+SELECT a.nome, b.peso , b.nome
+FROM tbl_Donos a INNER JOIN tbl_Animais b ON a.idCliente=b.dono 
+WHERE b.peso > 35
+
+
+
+SELECT a.nome, b.nome , c.dataConsulta 
+FROM tbl_Donos a INNER JOIN tbl_Animais b ON a.idCliente=b.dono INNER JOIN tbl_Consultas c ON b.idAnimal=c.animal 
+WHERE a.nome like 'A%a %'
+
+
+SELECT a.nome, b.nome , c.dataConsulta 
+FROM tbl_Donos a INNER JOIN tbl_Animais b ON a.idCliente=b.dono INNER JOIN tbl_Consultas c ON b.idAnimal=c.animal 
+WHERE a.nome like 'Antonio%' AND c.dataConsulta like '2001-%-%'
+
+
+
+SELECT a.nome, a.especie , b.idConsulta, c.idInternamento
+FROM tbl_Animais a INNER JOIN tbl_Consultas b ON a.idAnimal=b.animal INNER JOIN tbl_Internamento c ON b.idConsulta=c.consulta
+WHERE a.especie like 'cao'
+
+
+SELECT (DISTINCT) a.nome  <- ('permite eliminar todas as repetiçoes')
+FROM tbl_Animais a INNER JOIN tbl_Consultas b ON a.idAnimal=b.animal 
+INNER JOIN tbl_Internamento c ON b.idConsulta=c.consulta
+WHERE a.especie like 'cao'
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+Descobrir o nome do veterinario que tratou do cao pois especie é cao.
+
+SELECT a.nome, e.nome
+FROM tbl_Animais a INNER JOIN tbl_Consultas b 	ON a.idAnimal		=	b.animal 
+INNER JOIN tbl_Internamento c 					ON b.idConsulta 	= 	c.consulta
+INNER JOIN tbl_TecVeterinaria d 				ON c.tecnicoVet 	= 	d.idFuncionario
+INNER JOIN tbl_Funcionarios e 					ON d.idFuncionario 	= 	e.idFuncionario
+WHERE a.especie like 'cao'
+
+
+//////////////////////////////////////////////////
+
+
+Funcoes de agregação:
+
+Sum 	--- 	soma
+COUNT 	--- 	contagem
+AVG 	--- 	media
+MAX 	--- 	maximo
+MIN 	--- 	minimo
+
+
+///////////////////////////////////////////////////
+
+
+Peso total dos animais:
+
+SELECT sum(peso) 
+from tbl_Animais
+
+
+contagem dos caes:
+
+SELECT count(idAnimal)
+FROM tbl_Animais
+WHERE especie = 'cao'
+
+//////////////////////////////////////////////////////////////////
+
+vista dos donos e dos respetivos animais
+
+SELECT b.nome, a.idAnimal
+FROM tbl_Animais a INNER JOIN tbl_Donos b ON a.dono=b.idCliente
+
+contagem dos animais de cada dono:
+
+SELECT b.nome, count(a.idAnimal)
+FROM tbl_Animais a INNER JOIN tbl_Donos b ON a.dono=b.idCliente
+GROUP BY b.nome
+
+
+
+mostra os resultados que tem mais do que 2 consultas ((( atencao nao da com where (erro) ))) :
+
+SELECT a.nome, count(b.idconsulta)
+FROM tbl_Animais a INNER JOIN tbl_Consultas b on a.idanimal=b.animal
+group by a.nome
+having count(b.idconsulta)>=2
+
+
+troca o count(b.idconsulta) por contagem:
+
+SELECT a.nome, count(b.idconsulta) as contagem
+FROM tbl_Animais a INNER JOIN tbl_Consultas b on a.idanimal=b.animal
+group by a.nome
+having contagem>=2
+
+
+contagem de consultas ate para os animais que nao tem consultas (por causa do left) :
+
+SELECT a.nome, count(b.idconsulta) as contagem
+FROM tbl_Animais a (LEFT) JOIN tbl_Consultas b on a.idanimal=b.animal
+group by a.nome
+
+
+////////////////////////////////////////////////////////________Ordenação de tabela__________/////////////////////////////////////
+
+
+ordenaçao ascendente (nada escrito ou asc) :
+
+SELECT a.nome, count(b.idconsulta) as contagem
+FROM tbl_Animais a LEFT JOIN tbl_Consultas b on a.idanimal=b.animal
+group by a.nome
+ORDER BY contagem 
+
+
+ordenaçao descendente (desc) :
+
+SELECT a.nome, count(b.idconsulta) as contagem
+FROM tbl_Animais a LEFT JOIN tbl_Consultas b on a.idanimal=b.animal
+group by a.nome
+ORDER BY contagem DESC
+
+
+ordenacao descendente das consultas e ascendente dos nomes (ultima linha) :
+
+SELECT a.nome, count(b.idconsulta) as contagem
+FROM tbl_Animais a LEFT JOIN tbl_Consultas b on a.idanimal=b.animal
+group by a.nome
+ORDER BY contagem DESC , nome ASC
+
+
+Aparece spo os que tem mais consultas (por causa do limit) :
+
+SELECT a.nome, count(b.idconsulta) as contagem
+FROM tbl_Animais a LEFT JOIN tbl_Consultas b on a.idanimal=b.animal
+group by a.nome
+ORDER BY contagem DESC , nome ASC
+LIMIT 1
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+fornece contagem dos animais:
+
+		SELECT COUNT(idAnimal)
+		from tbl_Animais
+
+
+soma total do peso:
+
+		SELECT SUM(peso)
+		from tbl_Animais
+
+
+inner join
+registos que tem valor numa tabela e noutra ex animais que tem donos
+
+		dono e nr animais no total:
+
+			SELECT a.nome , COUNT(b.idAnimal)
+			FROM tbl_Donos a INNER JOIN tbl_Animais b ON a.idCliente = b.dono
+
+		nr animais por dono:
+
+			SELECT a.nome , COUNT(b.idAnimal)
+			FROM tbl_Donos a INNER JOIN tbl_Animais b ON a.idCliente = b.dono
+			GROUP BY a.nome
+
+		obtem o maximo do peso dos animais de cada dono
+
+			SELECT a.nome , MAX(peso)
+			FROM tbl_Donos a INNER JOIN tbl_Animais b ON a.idCliente = b.dono
+			GROUP BY a.nome
+
+		contagem das consultas do animal pastor 
+
+			SELECT COUNT(b.nome) ou COUNT(idConsulta)
+			FROM tbl_Consultas a INNER JOIN tbl_Animais b ON a.animal = b.idAnimal
+			WHERE b.nome = ('pastor')
+			
+		contagem das consultas dos animais
+			
+			SELECT b.nome
+			FROM tbl_Consultas a INNER JOIN tbl_Animais b ON a.animal = b.idAnimal
+			GROUP BY a.animal
+			
+			SELECT b.nome,count(*)
+			FROM tbl_Consultas a INNER JOIN tbl_Animais b ON a.animal = b.idAnimal
+			GROUP BY b.nome
+			
+		contagem de consultas onde os animais foram mais de 2x:	
+			
+			SELECT b.nome,count(*)
+			FROM tbl_Consultas a INNER JOIN tbl_Animais b ON a.animal = b.idAnimal
+			GROUP BY b.nome
+			HAVING (count(a.animal)>2)
+			
+		conta a quantidade de consultas de cada animal;	
+			
+			SELECT b.nome,COUNT(*)
+			FROM tbl_Consultas a INNER JOIN tbl_Animais b ON a.animal = b.idAnimal
+			INNER JOIN tbl_Veterinarios c ON a.veterinario=c.idFuncionario
+			GROUP by b.nome
+			
+		conta a quantidade de vets para cada animal:	
+			
+			SELECT b.nome, count(c.idFuncionario)
+			FROM tbl_Consultas a INNER JOIN tbl_Animais b ON a.animal = b.idAnimal
+			INNER JOIN tbl_Veterinarios c ON a.veterinario=c.idFuncionario
+			group by b.nome
+			
+		conta valores todos dos vets so os que nao sao repetidos que nao apresenta os repetidos :	
+
+			SELECT b.nome, count(DISTINCT c.idFuncionario)
+			FROM tbl_Consultas a INNER JOIN tbl_Animais b ON a.animal = b.idAnimal
+			INNER JOIN tbl_Veterinarios c ON a.veterinario=c.idFuncionario
+			group by b.nome
+			
+
+left join
+valores que nao tem nada ex animais que nao tem dono e animais com dono
+
+		todos os animais que foram a consultas e que nao foram (right join pois a tabela dos animais esta a direita e queremos saber
+		os animais que foram as consultas e nao as consultas que tem animais) (se a tabela dos animais tivesse a esquerda utilizavamos um
+		left join):::
+			
+			SELECT b.nome, a.idConsulta
+			FROM tbl_Consultas a RIGHT JOIN tbl_Animais b ON a.animal = b.idAnimal
+			
+			SELECT b.nome, a.idConsulta
+			FROM tbl_Consultas a RIGHT JOIN tbl_Animais b ON a.animal = b.idAnimal
+			WHERE a.idconsulta is null
+			
+			
+			
+			SELECT a.nome, c.idInternamento
+FROM tbl_Animais a LEFT JOIN tbl_Consultas b ON a.idAnimal = b.animal
+LEFT JOIN tbl_Internamento c on b.idConsulta = c.consulta
+WHERE c.consulta is null
+
+
+valores dos animais que nunca foram internados:
+
+SELECT DISTINCT (a.nome), COUNT(c.idInternamento) as cnt
+FROM tbl_Animais a LEFT JOIN tbl_Consultas b ON a.idAnimal = b.animal
+LEFT JOIN tbl_Internamento c on b.idConsulta = c.consulta
+group BY a.nome
+HAVING CNT = 0
+
+
+restricao de veternario com mais consultas:
+
+SELECT a.nome,COUNT(*) as contagem
+FROM tbl_Funcionarios a INNER JOIN tbl_Veterinarios b ON a.idFuncionario = b.idFuncionario
+INNER JOIN tbl_Consultas c on b.idFuncionario=c.veterinario
+group by a.nome
+order BY contagem DESC
+LIMIT 1
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Cenas:: Aula dia 25
+
+
+
+SELECT a.titulo, b.titulo
+FROM album a inner join faixas b
+on a.album_id = b.album
+WHERE b.duracao > all 		(SELECT c.duracao
+							FROM artist a inner join album b on a.artista_id = b.artista
+							inner join faixas c on b.album_id = c.altura
+							WHERE a.nome = 'Queen')
+
+
+
+	
+SELECT a.titulo, b.titulo
+FROM album a inner join faixas b
+on a.album_id = b.album
+WHERE b.duracao > SOME (1)	(SELECT c.duracao
+							FROM artist a inner join album b on a.artista_id = b.artista
+							inner join faixas c on b.album_id = c.altura
+							WHERE a.nome = 'Queen')
+							
+							
+SELECT a.titulo, b.titulo
+FROM album a inner join faixas b
+on a.album_id = b.album
+WHERE b.duracao > IN (1)	(SELECT c.duracao
+							FROM artist a inner join album b on a.artista_id = b.artista
+							inner join faixas c on b.album_id = c.altura
+							WHERE a.nome = 'Queen')
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+saber quais sao as faixas em que a duracao é maior que a media das faixas:
+
+SELECT a.titulo, b.titulo
+FROM album a inner join faixas b
+on a.album_id = b.album
+WHERE b.duracao > (SELECT AVG (duracao)
+					FROM faixas)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+consultas co-relacionadas:
+
+
+calculo da media de todos os albuns:
+
+SELECT a.titulo, b.titulo
+FROM album a inner join faixas b
+on a.album_id = b.album
+WHERE b.duracao  > 	(SELECT avg(duracao)
+					FROM faixas c
+					WHERE c.album = b.album)
+					
+//////////////////////////////////////////////////////
+					
+Tabelas derivadas:
+
+
+albuns dos queen com mais do que 40 minutos e menos de 10 faixas
+
+albuns com mais de 40 min: 1
+SELECT b.album_id, SUM (c.duracao) as soma
+FROM artista a inner join album b on a.artista_id = b.artista
+inner join faixas c on b.album_id = c.album
+WHERE a.nome = 'Queen'
+group by b.album_id
+having soma / 60 > 40
+
+albuns com menos de 10 faixas: 2
+SELECT b.album_id, count (c.faixa_id) as contador
+FROM artista a inner join album b on a.artista_id = b.artista
+inner join faixas c on b.album_id = c.album
+WHERE a.nome = 'Queen'
+group by b.album_id
+HAVING contador < 10
+
+conjunção de 1 e 2:
+SELECT tbl.album_id
+FROM (1) tbl1 inner join (2) tbl2
+on tbl1.album_id = tbl2.album_id
