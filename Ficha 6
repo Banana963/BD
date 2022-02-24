@@ -1,0 +1,94 @@
+
+1
+SELECT a.ano_album, f.duracao
+FROM album a INNER JOIN faixas f on a.album_id=f.album
+WHERE ano > 1980 and f.duracao in (SELECT * FROM (SELECT f.duracao
+                                   FROM faixas f
+                                   ORDER BY f.duracao ASC
+                                   limit 10)t1)
+								
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+SELECT f.titulo 
+FROM faixas f 
+WHERE ano > 1980 and f.album in (SELECT * FROM (SELECT f.album
+                                   FROM faixas f
+                                   GROUP by f.album
+                                   ORDER BY sum(f.duracao) desc 
+                                   limit 10)t1)
+								   
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+SELECT a.nome, COUNT(f.album) as total, f.titulo
+FROM faixas f INNER JOIN album b on f.album=b.album_id
+INNER JOIN artista a ON b.artista=a.artista_id
+GROUP BY f.artista
+order BY total DESC
+LIMIT 10
+WHERE f.album IN (SELECT f.album
+                    FROM faixas f 
+                    order BY f.duracao ASC
+                    LIMIT 50)
+
+ 
+SELECT a.nome, COUNT(f.album) as total, f.titulo
+FROM faixas f INNER JOIN album b on f.album=b.album_id
+INNER JOIN artista a ON b.artista=a.artista_id
+where f.artista in (SELECT f.artista
+					FROM artista a
+					GROUP by f.artista
+					ORDER by COUNT(f.album) DESC
+					limit 10
+					where f.album IN 	(SELECT f.album
+										FROM faixas f 
+										order BY sum(f.duracao) ASC
+										LIMIT 50)
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+2
+select DISTINCT t1.nome
+FROM (SELECT a.artista_id,a.nome,count(b.album_id)
+		from artista a inner join album b on a.artista_id=b.artista
+		group by a.artista_id
+		order by count(b.album_id) DESC
+		limit 10) t1,
+			(select a.artista, a.album_id,a.titulo,sum(b.duracao)
+			from album a inner join faixas b on a.album_id=b.album
+			group by a.album_id
+			order by sum(b.duracao) desc
+			limit 50) t2
+where t1.artista_id=t2.artista
+order by t1.nome	
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+I
+select a.nome, 	count(if(b.ano_album>1961 and b.ano_album<=1970,b.album_id,null)) as decada60, 
+				count(if(b.ano_album>1971 and b.ano_album<=1980,b.album_id,null)) as decada70, 
+                count(if(b.ano_album>1981 and b.ano_album<=1990,b.album_id,null)) as decada80, 
+                count(if(b.ano_album>1991 or b.ano_album<=1960,b.album_id,null)) as outras
+from artista a inner join album b on a.artista_id=b.artista
+group by a.artista_id
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+7
+select name, count(if(contagem<=5,album,null)), count(if(contagem>5,album,null))
+from (select distinct f.album, g.name, g.id, count(faixa_id) as contagem
+		from faixas f inner join genero g on f.genero = g.id
+		group by album,genero
+		order by album) tbl
+where name <> ''
+group by id
+order by name;
+
+
+1º parte -- consulta feita para obter a contagem das faixas por album e pelo diferente genero
+select distinct f.album, g.name, g.id, count(faixa_id) as contagem
+from faixas f inner join genero g on f.genero = g.id
+group by album,genero
+order by album;									
