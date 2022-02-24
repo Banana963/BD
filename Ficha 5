@@ -1,0 +1,91 @@
+1.titulo bitrate duracao para faixas com duracao superior a 3 min
+e inf a 1 min nao mostrar nulls
+
+Select titulo,bitrate,duracao from faixas where duracao > 180 or duracao < 60 and duracao <> 0
+
+2.liste as faixas (título, data de criação e data de alteração) cuja data de 
+alteração e criação do ficheiro não coincidem
+
+Select titulo,criacao,alteracao from faixas 
+where date(from_unixtime (alteracao)) <> date(from_unixtime (criacao))
+
+3.liste todas as faixas que contenham no título, simultaneamente, ou não, os 
+vocábulos "love" "you" e “my”. A ordem pela qual aparecem os vocábulos é 
+irrelevante.
+
+SELECT * from faixas 
+where concat(" ",titulo," ") like "% love %"
+or concat(" ",titulo," ") like "%my %"
+or concat(" ",titulo," ") like "%you %"
+or concat(" ",titulo," ") like "% you\' %"
+or concat(" ",titulo," ") like "% love\' %"
+
+4.Liste as últimas 5 faixas a terem sido alteradas.
+
+select * from faixas order by timestamp(from_unixtime (alteracao)) desc limit 5
+
+5.Liste para os álbuns "Help!" e "Abbey Road" dos "The Beatles", os 
+compositores das 5 primeiras faixas.
+
+select DISTINCT  compositor.nome 
+    from album
+        inner join compositor
+        inner join faixas
+        inner join fx_comp    
+        where album.titulo = "Help!" or album.titulo = "Abbey Road" or album.titulo = "The Beatles" 
+
+
+6.Liste as faixas que não têm lírica registada.
+
+select * from faixas a inner join letras where letras.lyrics = ''
+
+7.Liste todos os álbuns do artista "Wings" que contenham faixas classificadas 
+como "Pop" e que tenham sido escritas por um compositor que não seja "Paul McCartney"
+
+select * from album alb 
+	inner join artista art on (alb.artista = art.artista_id)
+    inner join faixas fai on (fai.artista = art.artista_id)
+    inner join genero gen on (gen.id = fai.genero)
+    inner join fx_comp fxco on (fxco.faixa_id = fai.faixa_id)
+    inner join compositor comp on (comp.compositor_id = fxco.compositor)
+    
+    where gen.name = 'Pop' and art.nome = 'Wings' and comp.nome != 'Paul McCartney' 
+
+
+8.
+select avg(a.bitrate)
+from faixas a
+where a.ano<2002
+
+9. Quais os artistas que editaram álbuns que contivessem mais de 12 faixas e 
+menos de 15?
+
+select distinct a.artista
+from album a
+inner join faixas f on f.album = a.album_id
+where a.artista is not null
+group by f.album
+having count(f.album) > 12 and count(f.album) < 15
+
+10.Qual o compositor que participa num maior número de álbuns?
+
+select count(a.album_id), c.nome
+from compositor c
+inner join fx_comp fx on fx.compositor = c.compositor_id
+inner join faixas f on f.faixa_id = fx.faixa_id
+inner join album a on a.album_id = f.album
+group by c.compositor_id
+order by count(a.album_id) desc
+limit 1
+
+
+11.
+select coun(titulo)
+from faixas
+where titulo like "The%"
+group by album
+
+
+
+insert into ficha5 (aluno,idresposta,resposta)
+values(23772,nº de alínea,'resposta');
